@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback, useRef, createContext, useContext } from "react";
 import "./App.css";
 
-// ─────────────────────────────────────────────────────────────
-// API layer — calls Express backend
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// API layer â calls Express backend
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const api = {
   get: (path) => fetch(path).then(r => { if (!r.ok) throw new Error(r.statusText); return r.json(); }),
   post: (path, body) => fetch(path, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) }).then(r => { if (!r.ok) throw new Error(r.statusText); return r.json(); }),
@@ -11,22 +11,22 @@ const api = {
   del:  (path)       => fetch(path, { method:'DELETE' }).then(r => { if (!r.ok) throw new Error(r.statusText); return r.json(); }),
 };
 
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // Context
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const AppCtx = createContext(null);
 function useApp() { return useContext(AppCtx); }
 
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // Sidebar
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const NAV = [
-  { label:"Dashboard",icon:"⊞" },{ label:"Website",icon:"◻" },
-  { label:"Courses",icon:"▤" },  { label:"Batches",icon:"⬡" },
-  { label:"Content",icon:"◈" },  { label:"Your App",icon:"⬕" },
-  { label:"Landing Pages",icon:"⊡" },{ label:"1:1 Sessions",icon:"⊙" },
-  { label:"Chats",icon:"◯" },   { label:"Analytics",icon:"⊿" },
-  { label:"Integrations",icon:"⊕" },{ label:"Campaigns",icon:"⊛" },
+  { label:"Dashboard",icon:"â" },{ label:"Website",icon:"â»" },
+  { label:"Courses",icon:"â¤" },  { label:"Batches",icon:"â¬¡" },
+  { label:"Content",icon:"â" },  { label:"Your App",icon:"â¬" },
+  { label:"Landing Pages",icon:"â¡" },{ label:"1:1 Sessions",icon:"â" },
+  { label:"Chats",icon:"â¯" },   { label:"Analytics",icon:"â¿" },
+  { label:"Integrations",icon:"â" },{ label:"Campaigns",icon:"â" },
 ];
 function Sidebar({ activeNav, setActiveNav, onBatchesClick }) {
   return (
@@ -52,9 +52,9 @@ function Sidebar({ activeNav, setActiveNav, onBatchesClick }) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // Progress Ring
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function ProgressRing({ pct=54 }) {
   const r=18, cx=23, cy=23, circ=2*Math.PI*r, dash=(pct/100)*circ;
   return (
@@ -68,9 +68,9 @@ function ProgressRing({ pct=54 }) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // Batch List View
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function BatchCard({ batch, onOpen, onMenu }) {
   return (
     <div className="batch-card" onClick={() => onOpen(batch)}>
@@ -78,7 +78,7 @@ function BatchCard({ batch, onOpen, onMenu }) {
       <div className="card-body">
         <div className="card-header">
           <div className="card-title">{batch.name}</div>
-          <div className="menu-btn" onClick={e => { e.stopPropagation(); onMenu(batch); }}>⋮</div>
+          <div className="menu-btn" onClick={e => { e.stopPropagation(); onMenu(batch); }}>â®</div>
         </div>
         <div className="card-desc">{batch.description || "No description"}</div>
         <div className="card-footer">
@@ -96,7 +96,7 @@ function BatchCard({ batch, onOpen, onMenu }) {
 function BatchList() {
   const { batches, loadBatches } = useApp();
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("A – Z");
+  const [sort, setSort] = useState("A â Z");
   const [showCreate, setShowCreate] = useState(false);
   const [menuBatch, setMenuBatch] = useState(null);
   const [editBatch, setEditBatch] = useState(null);
@@ -104,7 +104,7 @@ function BatchList() {
 
   const filtered = batches
     .filter(b => b.name.toLowerCase().includes(search.toLowerCase()))
-    .sort((a,z) => sort==="A – Z" ? a.name.localeCompare(z.name)
+    .sort((a,z) => sort==="A â Z" ? a.name.localeCompare(z.name)
                  : sort==="Most Students" ? z.student_count - a.student_count
                  : a.id - z.id);
 
@@ -126,11 +126,11 @@ function BatchList() {
 
       <div className="toolbar">
         <div className="search-box">
-          <span className="search-icon">⌕</span>
+          <span className="search-icon">â</span>
           <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search by Name"/>
         </div>
         <select className="sort-select" value={sort} onChange={e=>setSort(e.target.value)}>
-          <option>A – Z</option><option>Most Students</option><option>Recently Created</option>
+          <option>A â Z</option><option>Most Students</option><option>Recently Created</option>
         </select>
         <button className="create-btn" onClick={()=>setShowCreate(true)}>+ Create Batch</button>
       </div>
@@ -150,9 +150,9 @@ function BatchList() {
       {menuBatch  && (
         <ContextOverlay onClose={()=>setMenuBatch(null)}>
           <div className="ctx-menu">
-            <div className="ctx-item" onClick={()=>{ setEditBatch(menuBatch); setMenuBatch(null); }}>✏️ Edit Batch</div>
-            <div className="ctx-item open" onClick={()=>{ setCurrentBatch(menuBatch); setView("batch"); setMenuBatch(null); }}>📂 Open</div>
-            <div className="ctx-item danger" onClick={async()=>{ if(confirm(`Delete "${menuBatch.name}"?`)) { await api.del(`/api/batches/${menuBatch.id}`); setMenuBatch(null); loadBatches(); } }}>🗑 Delete</div>
+            <div className="ctx-item" onClick={()=>{ setEditBatch(menuBatch); setMenuBatch(null); }}>âï¸ Edit Batch</div>
+            <div className="ctx-item open" onClick={()=>{ setCurrentBatch(menuBatch); setView("batch"); setMenuBatch(null); }}>ð Open</div>
+            <div className="ctx-item danger" onClick={async()=>{ if(confirm(`Delete "${menuBatch.name}"?`)) { await api.del(`/api/batches/${menuBatch.id}`); setMenuBatch(null); loadBatches(); } }}>ð Delete</div>
           </div>
         </ContextOverlay>
       )}
@@ -160,9 +160,9 @@ function BatchList() {
   );
 }
 
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // Batch Create / Edit Modal
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function BatchModal({ batch, onClose, onSave }) {
   const [name, setName] = useState(batch?.name||"");
   const [desc, setDesc] = useState(batch?.description||"");
@@ -182,7 +182,7 @@ function BatchModal({ batch, onClose, onSave }) {
   return (
     <Modal title={batch ? "Edit Batch" : "Create New Batch"} onClose={onClose}>
       <label>Batch Name *</label>
-      <input className="modal-input" value={name} onChange={e=>setName(e.target.value)} placeholder="e.g. 5th Grade – Olympiads"/>
+      <input className="modal-input" value={name} onChange={e=>setName(e.target.value)} placeholder="e.g. 5th Grade â Olympiads"/>
       <label>Description</label>
       <textarea className="modal-input" value={desc} onChange={e=>setDesc(e.target.value)} placeholder="Brief description" rows={3}/>
       <label>Color</label>
@@ -193,15 +193,15 @@ function BatchModal({ batch, onClose, onSave }) {
       </div>
       <div className="modal-footer">
         <button className="btn-secondary" onClick={onClose}>Cancel</button>
-        <button className="btn-primary" onClick={handleSave} disabled={saving}>{saving?"Saving…":"Save Batch"}</button>
+        <button className="btn-primary" onClick={handleSave} disabled={saving}>{saving?"Savingâ¦":"Save Batch"}</button>
       </div>
     </Modal>
   );
 }
 
-// ─────────────────────────────────────────────────────────────
-// Batch Detail — Split view: folder tree + content viewer
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// Batch Detail â Split view: folder tree + content viewer
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function BatchDetail() {
   const { currentBatch, setView } = useApp();
   const [folders, setFolders] = useState([]);
@@ -280,7 +280,7 @@ function BatchDetail() {
     <div className="batch-detail">
       {/* Header */}
       <div className="detail-header">
-        <button className="back-btn" onClick={()=>setView("batches")}>← Back</button>
+        <button className="back-btn" onClick={()=>setView("batches")}>â Back</button>
         <div className="breadcrumb">
           <span className="bc-batch" onClick={()=>setSelectedFolder(null)}
             style={{cursor:"pointer",color:"#1a73e8",fontWeight:600}}>{currentBatch.name}</span>
@@ -293,13 +293,13 @@ function BatchDetail() {
         </div>
         <div className="detail-actions">
           <button className="btn-outline" onClick={()=>{ setNewFolderParent(selectedFolder?.id||null); setShowNewFolder(true); }}>
-            📁 New Folder
+            ð New Folder
           </button>
           {selectedFolder && (
             <>
-              <button className="btn-outline" onClick={()=>setShowAddContent({type:"video"})}>🎬 Video</button>
-              <button className="btn-outline" onClick={()=>setShowAddContent({type:"pdf"})}>📄 PDF</button>
-              <button className="btn-outline" onClick={()=>setShowAddContent({type:"quiz"})}>📝 Quiz</button>
+              <button className="btn-outline" onClick={()=>setShowAddContent({type:"video"})}>ð¬ Video</button>
+              <button className="btn-outline" onClick={()=>setShowAddContent({type:"pdf"})}>ð PDF</button>
+              <button className="btn-outline" onClick={()=>setShowAddContent({type:"quiz"})}>ð Quiz</button>
               <button className="btn-primary" onClick={()=>setShowAddContent({type:""})}>+ Add Content</button>
             </>
           )}
@@ -307,12 +307,12 @@ function BatchDetail() {
       </div>
 
       <div className="detail-body">
-        {/* ── Folder Tree (Left) ── */}
+        {/* ââ Folder Tree (Left) ââ */}
         <div className="folder-panel">
           <div className="panel-title">
-            <span>📚 Folders</span>
+            <span>ð Folders</span>
             <button className="icon-btn" title="New root folder"
-              onClick={()=>{ setNewFolderParent(null); setShowNewFolder(true); }}>＋</button>
+              onClick={()=>{ setNewFolderParent(null); setShowNewFolder(true); }}>ï¼</button>
           </div>
           <div className="folder-tree">
             {rootFolders.length === 0
@@ -331,11 +331,11 @@ function BatchDetail() {
           </div>
         </div>
 
-        {/* ── Content Panel (Right) ── */}
+        {/* ââ Content Panel (Right) ââ */}
         <div className="content-panel">
           {!selectedFolder ? (
             <div className="content-empty-state">
-              <div className="empty-icon">📂</div>
+              <div className="empty-icon">ð</div>
               <h3>Select a folder to view content</h3>
               <p>Or create a new folder using the button above</p>
               {rootFolders.length === 0 && (
@@ -347,19 +347,19 @@ function BatchDetail() {
           ) : (
             <>
               <div className="content-header">
-                <h2>📁 {selectedFolder.name}</h2>
+                <h2>ð {selectedFolder.name}</h2>
                 <span className="item-count">{items.length} item{items.length!==1?"s":""}</span>
               </div>
               {/* Sub-folders in content area */}
               <div className="subfolder-chips">
                 {folders.filter(f=>f.parent_id===selectedFolder.id).map(sf=>(
                   <div key={sf.id} className="subfolder-chip" onClick={()=>setSelectedFolder(sf)}>
-                    📁 {sf.name}
+                    ð {sf.name}
                   </div>
                 ))}
               </div>
               {loadingItems
-                ? <div className="loading">Loading…</div>
+                ? <div className="loading">Loadingâ¦</div>
                 : items.length===0
                   ? <div className="content-empty">
                       <p>No content yet in this folder.</p>
@@ -405,16 +405,16 @@ function BatchDetail() {
       {folderCtx && (
         <ContextOverlay onClose={()=>setFolderCtx(null)}>
           <div className="ctx-menu" style={{top:folderCtx.y, left:folderCtx.x}}>
-            <div className="ctx-item" onClick={()=>{ setRenameTarget(folderCtx.folder); setFolderCtx(null); }}>✏️ Rename</div>
-            <div className="ctx-item" onClick={()=>{ setNewFolderParent(folderCtx.folder.id); setShowNewFolder(true); setFolderCtx(null); }}>📁 New Subfolder</div>
-            <div className="ctx-item danger" onClick={()=>{ handleDeleteFolder(folderCtx.folder); setFolderCtx(null); }}>🗑 Delete</div>
+            <div className="ctx-item" onClick={()=>{ setRenameTarget(folderCtx.folder); setFolderCtx(null); }}>âï¸ Rename</div>
+            <div className="ctx-item" onClick={()=>{ setNewFolderParent(folderCtx.folder.id); setShowNewFolder(true); setFolderCtx(null); }}>ð New Subfolder</div>
+            <div className="ctx-item danger" onClick={()=>{ handleDeleteFolder(folderCtx.folder); setFolderCtx(null); }}>ð Delete</div>
           </div>
         </ContextOverlay>
       )}
       {itemCtx && (
         <ContextOverlay onClose={()=>setItemCtx(null)}>
           <div className="ctx-menu" style={{top:itemCtx.y, left:itemCtx.x}}>
-            <div className="ctx-item danger" onClick={()=>{ handleDeleteItem(itemCtx.item); setItemCtx(null); }}>🗑 Delete</div>
+            <div className="ctx-item danger" onClick={()=>{ handleDeleteItem(itemCtx.item); setItemCtx(null); }}>ð Delete</div>
           </div>
         </ContextOverlay>
       )}
@@ -422,9 +422,9 @@ function BatchDetail() {
   );
 }
 
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // Folder Tree Node
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function FolderNode({ folder, allFolders, selected, depth, onSelect, onNewChild, onRename, onDelete, onCtx, onDrop, dragOver, setDragOver }) {
   const [open, setOpen] = useState(depth < 1);
   const children = allFolders.filter(f => f.parent_id === folder.id);
@@ -445,17 +445,17 @@ function FolderNode({ folder, allFolders, selected, depth, onSelect, onNewChild,
         onContextMenu={e => { e.preventDefault(); onCtx({folder, x:e.clientX, y:e.clientY}); }}
         onClick={() => { setOpen(o=>!o); onSelect(folder); }}>
         <span className="tree-arrow" onClick={e=>{e.stopPropagation();setOpen(o=>!o);}}>
-          {hasChildren ? (open?"▾":"▸") : " "}
+          {hasChildren ? (open?"â¾":"â¸") : " "}
         </span>
-        <span className="tree-icon">{isSelected?"📂":"📁"}</span>
+        <span className="tree-icon">{isSelected?"ð":"ð"}</span>
         <span className="tree-name">{folder.name}</span>
         <span className="tree-actions">
           <button className="tree-btn" title="New subfolder"
-            onClick={e=>{e.stopPropagation();onNewChild(folder.id);}}>＋</button>
+            onClick={e=>{e.stopPropagation();onNewChild(folder.id);}}>ï¼</button>
           <button className="tree-btn" title="Rename"
-            onClick={e=>{e.stopPropagation();onRename(folder);}}>✏</button>
+            onClick={e=>{e.stopPropagation();onRename(folder);}}>â</button>
           <button className="tree-btn danger" title="Delete"
-            onClick={e=>{e.stopPropagation();onDelete(folder);}}>✕</button>
+            onClick={e=>{e.stopPropagation();onDelete(folder);}}>â</button>
         </span>
       </div>
       {open && hasChildren && (
@@ -473,16 +473,16 @@ function FolderNode({ folder, allFolders, selected, depth, onSelect, onNewChild,
   );
 }
 
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // Content Card
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const TYPE_META = {
-  video:      { icon:"🎬", label:"Video",      color:"#e3f2fd" },
-  pdf:        { icon:"📄", label:"PDF",         color:"#fce4ec" },
-  quiz:       { icon:"📝", label:"Quiz",        color:"#f3e5f5" },
-  assignment: { icon:"📋", label:"Assignment",  color:"#e8f5e9" },
-  image:      { icon:"🖼", label:"Image",       color:"#fff8e1" },
-  link:       { icon:"🔗", label:"Link",        color:"#e0f2f1" },
+  video:      { icon:"ð¬", label:"Video",      color:"#e3f2fd" },
+  pdf:        { icon:"ð", label:"PDF",         color:"#fce4ec" },
+  quiz:       { icon:"ð", label:"Quiz",        color:"#f3e5f5" },
+  assignment: { icon:"ð", label:"Assignment",  color:"#e8f5e9" },
+  image:      { icon:"ð¼", label:"Image",       color:"#fff8e1" },
+  link:       { icon:"ð", label:"Link",        color:"#e0f2f1" },
 };
 function ContentCard({ item, selected, onClick, onCtx }) {
   const meta = TYPE_META[item.type] || TYPE_META.link;
@@ -499,16 +499,16 @@ function ContentCard({ item, selected, onClick, onCtx }) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // Content Detail Panel
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function ContentDetail({ item, onClose }) {
   const meta = TYPE_META[item.type] || TYPE_META.link;
   const md = (() => { try { return typeof item.metadata==="string" ? JSON.parse(item.metadata) : item.metadata; } catch { return {}; } })();
 
   return (
     <div className="content-detail">
-      <div className="detail-close" onClick={onClose}>✕</div>
+      <div className="detail-close" onClick={onClose}>â</div>
       <div className="detail-type-badge" style={{background:meta.color}}>{meta.icon} {meta.label}</div>
       <h3 className="detail-title">{item.title}</h3>
       {item.description && <p className="detail-desc">{item.description}</p>}
@@ -523,24 +523,24 @@ function ContentDetail({ item, onClose }) {
         </div>
       )}
       {item.type==="pdf" && item.url && (
-        <a className="btn-primary" href={item.url} target="_blank" rel="noreferrer">📄 Open PDF</a>
+        <a className="btn-primary" href={item.url} target="_blank" rel="noreferrer">ð Open PDF</a>
       )}
       {item.type==="image" && item.url && (
         <img src={item.url} alt={item.title} className="detail-img"/>
       )}
       {item.type==="link" && item.url && (
-        <a className="btn-outline" href={item.url} target="_blank" rel="noreferrer">🔗 Open Link</a>
+        <a className="btn-outline" href={item.url} target="_blank" rel="noreferrer">ð Open Link</a>
       )}
       {item.type==="quiz" && (
         <div className="quiz-preview">
-          <p>⏱ Time limit: {md.time_limit||0} mins,/p>
-          <p>❓ Questions: {Array.isArray(md.questions)?md.questions.length:0}</p>
+          <p>â± Time limit: {md.time_limit||0} mins</p>
+          <p>â Questions: {Array.isArray(md.questions)?md.questions.length:0}</p>
         </div>
       )}
       {item.type==="assignment" && (
         <div className="assignment-preview">
-          <p>📅 Due: {md.due_date||"Not set"}</p>
-          <p>📊 Max marks: {md.max_marks||"Not set"}</p>
+          <p>ð Due: {md.due_date||"Not set"}</p>
+          <p>ð Max marks: {md.max_marks||"Not set"}</p>
         </div>
       )}
       <div className="detail-meta">
@@ -555,16 +555,16 @@ function extractYouTubeId(url) {
   return m ? m[1] : "";
 }
 
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // Modals
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function Modal({ title, onClose, children }) {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-box" onClick={e=>e.stopPropagation()}>
         <div className="modal-header">
           <h3>{title}</h3>
-          <button className="modal-close" onClick={onClose}>✕</button>
+          <button className="modal-close" onClick={onClose}>â</button>
         </div>
         <div className="modal-body">{children}</div>
       </div>
@@ -593,10 +593,10 @@ function FolderModal({ parentId, batchId, onClose, onSave }) {
       <input ref={inputRef} className="modal-input" value={name}
         onChange={e=>setName(e.target.value)}
         onKeyDown={e=>e.key==="Enter"&&handleSave()}
-        placeholder="e.g. Mathematics, Chapter 1…"/>
+        placeholder="e.g. Mathematics, Chapter 1â¦"/>
       <div className="modal-footer">
         <button className="btn-secondary" onClick={onClose}>Cancel</button>
-        <button className="btn-primary" onClick={handleSave} disabled={saving}>{saving?"Creating…":"Create Folder"}</button>
+        <button className="btn-primary" onClick={handleSave} disabled={saving}>{saving?"Creatingâ¦":"Create Folder"}</button>
       </div>
     </Modal>
   );
@@ -621,12 +621,12 @@ function RenameModal({ name: initial, onClose, onSave }) {
 }
 
 const CONTENT_TYPES = [
-  { value:"video",icon:"🎬",label:"Video Lesson" },
-  { value:"pdf",icon:"📄",label:"PDF Notes" },
-  { value:"quiz",icon:"📝",label:"Quiz / MCQ" },
-  { value:"assignment",icon:"📋",label:"Assignment" },
-  { value:"image",icon:"🖼",label:"Image" },
-  { value:"link",icon:"🔗",label:"External Link" },
+  { value:"video",icon:"ð¬",label:"Video Lesson" },
+  { value:"pdf",icon:"ð",label:"PDF Notes" },
+  { value:"quiz",icon:"ð",label:"Quiz / MCQ" },
+  { value:"assignment",icon:"ð",label:"Assignment" },
+  { value:"image",icon:"ð¼",label:"Image" },
+  { value:"link",icon:"ð",label:"External Link" },
 ];
 
 function AddContentModal({ folderId, initialType="", onClose, onSave }) {
@@ -673,7 +673,7 @@ function AddContentModal({ folderId, initialType="", onClose, onSave }) {
         <>
           <label>{type==="video"?"YouTube / Video URL":type==="pdf"?"PDF URL":"URL"}</label>
           <input className="modal-input" value={url} onChange={e=>setUrl(e.target.value)}
-            placeholder={type==="video"?"https://youtube.com/watch?v=…":type==="pdf"?"https://drive.google.com/…":"https://…"}/>
+            placeholder={type==="video"?"https://youtube.com/watch?v=â¦":type==="pdf"?"https://drive.google.com/â¦":"https://â¦"}/>
         </>
       )}
       {type==="assignment" && (
@@ -692,19 +692,19 @@ function AddContentModal({ folderId, initialType="", onClose, onSave }) {
       )}
 
       <label>Description (optional)</label>
-      <textarea className="modal-input" value={desc} onChange={e=>setDesc(e.target.value)} rows={2} placeholder="Brief description…"/>
+      <textarea className="modal-input" value={desc} onChange={e=>setDesc(e.target.value)} rows={2} placeholder="Brief descriptionâ¦"/>
 
       <div className="modal-footer">
         <button className="btn-secondary" onClick={onClose}>Cancel</button>
-        <button className="btn-primary" onClick={handleSave} disabled={saving}>{saving?"Adding…":"Add Content"}</button>
+        <button className="btn-primary" onClick={handleSave} disabled={saving}>{saving?"Addingâ¦":"Add Content"}</button>
       </div>
     </Modal>
   );
 }
 
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // Context Overlay (for right-click menus, etc.)
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function ContextOverlay({ onClose, children }) {
   return (
     <div className="ctx-overlay" onClick={onClose}>
@@ -713,9 +713,9 @@ function ContextOverlay({ onClose, children }) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // Root App
-// ─────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 export default function App() {
   const [view, setView]               = useState("batches");
   const [batches, setBatches]         = useState([]);
@@ -750,11 +750,11 @@ export default function App() {
           {loading ? (
             <div className="loading-screen">
               <div className="spinner"/>
-              <p>Loading LMS…</p>
+              <p>Loading LMSâ¦</p>
             </div>
           ) : error ? (
             <div className="error-screen">
-              <div className="error-icon">⚠️</div>
+              <div className="error-icon">â ï¸</div>
               <h3>Connection Error</h3>
               <p>{error}</p>
               <button className="btn-primary" onClick={loadBatches}>Retry</button>
