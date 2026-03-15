@@ -3,13 +3,13 @@ name: Deploy to Hostinger VPS
 on:
   push:
     branches:
-      - main   # triggers on every push to main branch
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -22,19 +22,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build app
+      - name: Build React app
         run: npm run build
 
-      - name: Copy Nginx config to VPS
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          source: "nginx/batches-app.conf"
-          target: "/tmp/"
-          strip_components: 1
-
+      # ── Copy frontend (dist) ──────────────────────────────────
       - name: Deploy dist/ to VPS
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -45,14 +36,76 @@ jobs:
           target: "/var/www/batches-app/"
           strip_components: 1
 
-      - name: Reload Nginx
+      # ── Copy backend source ───────────────────────────────────
+      - name: Deploy server/ to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "server/*"
+          target: "/var/www/batches-app-server/"
+          strip_components: 1
+
+      # ── Copy package.json for production install ──────────────
+      - name: Deploy package.json to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "package.json,package-lock.json"
+          target: "/var/www/batches-app-server/"
+
+      # ── Copy Nginx config ─────────────────────────────────────
+      - name: Copy Nginx config to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "nginx/batches-app.conf"
+          target: "/tmp/"
+          strip_components: 1
+
+      # ── Remote: install deps, reload nginx, restart PM2 ──────
+      - name: Setup backend & reload services
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
+            set -e
+
+            # ── Node + npm (ensure available) ──────────────────
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+            node -v || curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && apt-get install -y nodejs
+
+            # ── Install PM2 globally if missing ───────────────
+            pm2 -v || npm install -g pm2
+
+            # ── Install production dependencies ───────────────
+            cd /var/www/batches-app-server
+            npm install --omit=dev
+
+            # ── Ensure data directory exists ──────────────────
+            mkdir -p /var/www/batches-app-data
+
+            # ── Start or restart the API server via PM2 ───────
+            pm2 describe lms-api > /dev/null 2>&1 \
+              && pm2 restart lms-api \
+              || pm2 start /var/www/batches-app-server/index.js \
+                   --name lms-api \
+                   --env production \
+                   -- \
+                   --port 3001
+            pm2 save
+
+            # ── Update Nginx config ────────────────────────────
             cp /tmp/batches-app.conf /etc/nginx/sites-available/batches-app
             ln -sf /etc/nginx/sites-available/batches-app /etc/nginx/sites-enabled/batches-app
             nginx -t && systemctl reload nginx
-            echo "✅ Deployed successfully at $(date)"
+
+            echo "✅ LMS deployed successfully at $(date)"
