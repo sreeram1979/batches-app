@@ -22,7 +22,7 @@ jobs:
         run: npm install
 
       - name: Build React app
-        run: npm run build
+        run: npx vite build
 
       # Copy frontend (dist)
       - name: Deploy dist/ to VPS
@@ -90,4 +90,4 @@ jobs:
             cp /tmp/batches-app.conf /etc/nginx/sites-available/batches-app
             ln -sf /etc/nginx/sites-available/batches-app /etc/nginx/sites-enabled/batches-app
             nginx -t && systemctl reload nginx
-            echo "LMS deployed successfully at $(date)"
+            echo "LMS deployed at $(date)"
