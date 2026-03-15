@@ -22,7 +22,7 @@ jobs:
         run: npm install
 
       - name: Build React app
-        run: npx vite build
+        run: node node_modules/vite/bin/vite.js build
 
       # Copy frontend (dist)
       - name: Deploy dist/ to VPS
